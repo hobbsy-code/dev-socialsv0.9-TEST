@@ -124,9 +124,35 @@ enum SpendCategory: String, Codable, CaseIterable, Identifiable {
         }
     }
 
-    var colour: Color {
-        let index = SpendCategory.allCases.firstIndex(of: self) ?? 0
-        return Theme.chartPalette[index % Theme.chartPalette.count]
+    /// Each outgoing category has its own colour so charts never show two categories in the same hue.
+    var colour: Color { Color(hex: colourHex) }
+
+    var colourHex: UInt32 {
+        switch self {
+        case .salary: 0x2E7D4F
+        case .benefits: 0x1F8A84
+        case .sideIncome: 0xD9AE5B
+        case .refund: 0x3E9CC9
+        case .otherIncome: 0x6AA84F
+        case .housing: 0x8E6CC4
+        case .councilTax: 0xE08A3C
+        case .utilities: 0x3E9CC9
+        case .groceries: 0x6AA84F
+        case .transport: 0x5B6B82
+        case .eatingOut: 0x1F8A84
+        case .shopping: 0xD9AE5B
+        case .subscriptions: 0x4C6FBF
+        case .insurance: 0xC2637A
+        case .debtRepayment: 0xA9742A
+        case .health: 0xD16BA5
+        case .childcare: 0x7FB3D5
+        case .personalCare: 0xB39DDB
+        case .entertainment: 0x9C8A6E
+        case .gifts: 0xEF8E7A
+        case .savings: 0x0E5E5A
+        case .other: 0xA0AAB8
+        case .transfer: 0x5B6B82
+        }
     }
 }
 

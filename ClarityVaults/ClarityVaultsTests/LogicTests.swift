@@ -201,3 +201,10 @@ final class BalanceEngineTests: XCTestCase {
         XCTAssertNil(Fmt.parseAmount(""))
     }
 }
+
+final class CategoryColourTests: XCTestCase {
+    func testOutgoingCategoriesHaveDistinctColours() {
+        let hexes = SpendCategory.expenseCases.map(\.colourHex)
+        XCTAssertEqual(Set(hexes).count, hexes.count, "each outgoing category needs its own chart colour")
+    }
+}

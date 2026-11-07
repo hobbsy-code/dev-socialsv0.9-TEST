@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Clarity Vaults screens</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0F1C33; --muted:#5B6B82; --bg:#F4F6F9; --surface:#fff; --hair:#E3E8EF;
+    --navy:#0F1C33; --navy2:#1C2E4F; --accent:#1F8A84; --gold:#B8872E; --gold2:#D9AE5B;
+    --pos:#2E7D4F; --caution:#C07A1C; --neg:#B54A3C;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#DDE3EA;font-family:Inter,-apple-system,"Segoe UI",sans-serif;color:var(--ink);padding:40px;
+       display:flex;flex-wrap:wrap;gap:40px;justify-content:center}
+  .phone{width:390px;height:844px;background:var(--bg);border-radius:48px;overflow:hidden;position:relative;
+         box-shadow:0 0 0 10px #10151d,0 24px 60px rgba(15,28,51,.35);display:flex;flex-direction:column}
+  .status{height:50px;display:flex;justify-content:space-between;align-items:flex-end;padding:0 32px 6px;font-weight:600;font-size:15px;flex:none}
+  .status .island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#000;border-radius:20px}
+  .status .icons{display:flex;gap:6px;align-items:center}
+  .content{flex:1;overflow:hidden;padding:0 16px 16px}
+  .navbar{display:flex;justify-content:space-between;align-items:center;height:44px;color:var(--accent);font-size:17px;padding:0 4px}
+  .navbar.center{justify-content:center;position:relative;color:var(--ink);font-weight:600}
+  .navbar.center .back{position:absolute;left:0;color:var(--accent);font-weight:400}
+  h1{font-size:34px;font-weight:700;letter-spacing:-.5px;margin:2px 4px 12px}
+  .card{background:var(--surface);border:1px solid var(--hair);border-radius:18px;padding:16px;margin-bottom:14px}
+  .vault{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:18px;padding:20px;margin-bottom:14px}
+  .hdr{display:flex;align-items:center;gap:7px;font-weight:600;font-size:16px;margin-bottom:10px}
+  .hdr .ico{color:var(--accent);display:flex}
+  .hdr .right{margin-left:auto;font-size:12px;font-weight:600;color:var(--accent)}
+  .hdr .right.m{color:var(--muted);font-weight:400}
+  .muted{color:var(--muted)} .cap{font-size:12px} .sub{font-size:15px}
+  .stats{display:flex} .stat{flex:1} .stat .l{font-size:12px;color:var(--muted)} .stat .v{font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+  .big{font-size:40px;font-weight:600;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+  .row{display:flex;align-items:center;gap:12px;padding:7px 0}
+  .row .t{flex:1;min-width:0} .row .n{font-size:16px;font-weight:500} .row .s{font-size:12px;color:var(--muted)}
+  .amt{font-variant-numeric:tabular-nums;font-size:16px}
+  .ci{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+  .ai{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:none}
+  .tag{font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px;background:rgba(31,138,132,.14);color:var(--accent);margin-left:6px;vertical-align:2px}
+  .tag.inc{background:rgba(46,125,79,.14);color:var(--pos)}
+  .bar{height:8px;background:var(--hair);border-radius:4px;overflow:hidden;margin-top:5px} .bar>div{height:100%;border-radius:4px}
+  .brow{margin:10px 0 0} .brow .top{display:flex;justify-content:space-between;font-size:14px}
+  .divider{height:1px;background:var(--hair);margin:12px 0}
+  .tabbar{height:84px;background:rgba(249,250,252,.94);border-top:1px solid var(--hair);display:flex;justify-content:space-around;padding-top:8px;flex:none}
+  .tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:#8A96A8;font-weight:500;width:70px}
+  .tab.on{color:var(--accent)}
+  .seg{display:flex;background:#E6EAF0;border-radius:9px;padding:2px;margin-bottom:14px}
+  .seg div{flex:1;text-align:center;font-size:13px;font-weight:500;padding:6px 0;border-radius:7px}
+  .seg .on{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12);font-weight:600}
+  .group{background:#fff;border-radius:12px;padding:0 16px;margin-bottom:22px}
+  .group .row{border-bottom:1px solid var(--hair);padding:10px 0}
+  .group .row:last-child{border-bottom:none}
+  .ghead{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);text-transform:uppercase;margin:0 16px 6px;letter-spacing:.2px}
+  .chev{color:#B7C0CC}
+  .num{width:24px;height:24px;border-radius:50%;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+  .slider{height:4px;background:var(--hair);border-radius:2px;position:relative;margin:14px 0 10px}
+  .slider .fill{position:absolute;left:0;top:0;bottom:0;background:var(--accent);border-radius:2px}
+  .slider .knob{position:absolute;top:-12px;width:28px;height:28px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+  .legend{display:flex;gap:14px;font-size:11px;color:var(--muted);margin-top:6px}
+  .legend span{display:flex;align-items:center;gap:5px} .legend i{width:8px;height:8px;border-radius:50%;display:inline-block}
+  .home-ind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:#0F1C33}
+  .caption{width:100%;text-align:center;font-size:13px;color:#5B6B82}
+</style>
+</head>
+<body>
+
+<!-- ============ 1. HOME ============ -->
+<div class="phone" id="home">
+  <div class="status"><span>9:41</span><div class="island"></div><span class="icons" data-status></span></div>
+  <div class="content">
+    <div class="navbar"><span data-icon="gear"></span><span data-icon="plus"></span></div>
+    <h1>Good morning</h1>
+    <div class="vault">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:15px;opacity:.75">Safe to spend until payday</span><span data-vault="28"></span>
+      </div>
+      <div class="big" style="margin:6px 0 8px">£675.00</div>
+      <div style="display:flex;gap:16px;font-size:12px;opacity:.85">
+        <span>📅&nbsp; 20 days to payday</span><span>☀︎&nbsp; £34 a day</span>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:var(--gold2);margin-top:10px">How is this worked out?</div>
+    </div>
+    <div class="card" style="display:flex;align-items:center;gap:12px">
+      <span style="color:var(--gold);font-size:24px">✓</span>
+      <div style="flex:1"><div style="font-weight:600">Weekly check-in</div><div class="cap muted">Update your balances from your banking apps. About 30 seconds.</div></div>
+      <span class="chev">›</span>
+    </div>
+    <div class="card">
+      <div class="hdr"><span class="ico" data-icon="cal"></span>This pay period<span class="right m">28 Oct – 26 Nov</span></div>
+      <div class="stats">
+        <div class="stat"><div class="l">Money in</div><div class="v" style="color:var(--pos)">£2,350</div></div>
+        <div class="stat"><div class="l">Money out</div><div class="v">£1,012</div></div>
+        <div class="stat"><div class="l">Difference</div><div class="v" style="color:var(--pos)">+£1,338.00</div></div>
+      </div>
+      <div class="divider"></div>
+      <div data-budgets></div>
+    </div>
+    <div class="card">
+      <div class="hdr"><span class="ico" data-icon="trend"></span>Cash forecast</div>
+      <div class="cap muted">Your spending money over the next 5 weeks, based on scheduled bills and income.</div>
+      <svg id="forecast" width="356" height="150" style="margin-top:8px"></svg>
+    </div>
+  </div>
+  <div class="tabbar" data-tabs="0"></div><div class="home-ind"></div>
+</div>
+
+<!-- ============ 2. HOME (scrolled) ============ -->
+<div class="phone" id="home2">
+  <div class="status"><span>9:41</span><div class="island"></div><span class="icons" data-status></span></div>
+  <div class="navbar center" style="margin:0 16px">Good morning</div>
+  <div class="content" style="padding-top:6px">
+    <div class="card">
+      <div class="hdr"><span class="ico" data-icon="trend"></span>Cash forecast</div>
+      <svg id="forecast2" width="356" height="130"></svg>
+      <div class="cap muted" style="margin-top:6px">Lowest point: £725.00 on 25 Nov, before day-to-day spending.</div>
+    </div>
+    <div class="card">
+      <div class="hdr"><span class="ico" data-icon="clock"></span>Coming up<span class="right">All bills</span></div>
+      <div data-bills="home"></div>
+    </div>
+    <div class="card">
+      <div class="hdr"><span class="ico" data-icon="scale"></span>Your position</div>
+      <div class="stats">
+        <div class="stat"><div class="l">You have</div><div class="v" style="color:var(--pos)">£4,460</div></div>
+        <div class="stat"><div class="l">You owe</div><div class="v">£9,890</div></div>
+        <div class="stat"><div class="l">Net worth</div><div class="v">−£5,430</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="hdr"><span class="ico" data-icon="flag"></span>Debt-free date</div>
+      <div style="font-size:22px;font-weight:600">October 2029</div>
+      <div class="cap muted">Paying £50 a month on top of minimums (avalanche).</div>
+      <div class="bar" style="margin-top:10px"><div style="width:13%;background:var(--gold)"></div></div>
+      <div class="cap muted" style="margin-top:6px">13% of tracked debt repaid so far</div>
+    </div>
+  </div>
+  <div class="tabbar" data-tabs="0"></div><div class="home-ind"></div>
+</div>
+
+<!-- ============ 3. BILLS ============ -->
+<div class="phone" id="bills">
+  <div class="status"><span>9:41</span><div class="island"></div><span class="icons" data-status></span></div>
+  <div class="content">
+    <div class="navbar"><span></span><span data-icon="plus"></span></div>
+    <h1>Bills &amp; income</h1>
+    <div class="group" style="padding:14px 16px"><div class="stats">
+      <div class="stat"><div class="l">Due before payday</div><div class="v">£1,246</div></div>
+      <div class="stat"><div class="l">Bills per month (avg)</div><div class="v">£1,233</div></div>
+    </div></div>
+    <div class="ghead">Needs attention</div>
+    <div class="group" data-bills="overdue"></div>
+    <div class="ghead">Before payday (27 Nov)</div>
+    <div class="group" data-bills="before"></div>
+    <div class="ghead">Later</div>
+    <div class="group" data-bills="later"></div>
+  </div>
+  <div class="tabbar" data-tabs="2"></div><div class="home-ind"></div>
+</div>
+
+<!-- ============ 4. PAYOFF PLANNER ============ -->
+<div class="phone" id="payoff">
+  <div class="status"><span>9:41</span><div class="island"></div><span class="icons" data-status></span></div>
+  <div class="navbar center" style="margin:0 16px"><span class="back">‹ Accounts</span>Payoff planner</div>
+  <div class="content" style="padding-top:6px">
+    <div class="vault">
+      <div style="font-size:15px;opacity:.75">Debt-free by</div>
+      <div style="font-size:34px;font-weight:600;margin:2px 0 4px">October 2029</div>
+      <div style="font-size:15px;opacity:.85">2 years 11 months · £2,068 interest</div>
+      <div style="height:1px;background:rgba(255,255,255,.2);margin:12px 0"></div>
+      <div style="font-size:12px;color:var(--gold2)">✦&nbsp; 9 months sooner and £1,034 less interest than minimum payments alone</div>
+    </div>
+    <div class="card">
+      <div class="seg" style="margin-bottom:8px"><div class="on">Avalanche</div><div>Snowball</div></div>
+      <div class="cap muted">Highest interest rate first. Usually costs the least overall.</div>
+      <div class="divider"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:15px;font-weight:500">Extra each month</span>
+        <span style="font-weight:600;color:var(--accent);font-size:17px">£50</span>
+      </div>
+      <div class="slider"><div class="fill" style="width:5%"></div><div class="knob" style="left:calc(5% - 14px)"></div></div>
+      <div class="cap muted">On top of £300 minimum payments, a total of £350 a month.</div>
+    </div>
+    <div class="card">
+      <div class="hdr"><span class="ico" data-icon="down"></span>Balance over time</div>
+      <svg id="payoffChart" width="356" height="170"></svg>
+      <div class="legend"><span><i style="background:#1F8A84"></i>Store card</span><span><i style="background:#D9AE5B"></i>Visa credit card</span><span><i style="background:#4C6FBF"></i>Car loan</span></div>
+    </div>
+    <div class="card">
+      <div class="hdr"><span class="ico" data-icon="list"></span>Payoff order</div>
+      <div data-order></div>
+    </div>
+  </div>
+  <div class="tabbar" data-tabs="3"></div><div class="home-ind"></div>
+</div>
+
+<!-- ============ 5. INSIGHTS ============ -->
+<div class="phone" id="insights">
+  <div class="status"><span>9:41</span><div class="island"></div><span class="icons" data-status></span></div>
+  <div class="content">
+    <div class="navbar"></div>
+    <h1>Insights</h1>
+    <div class="seg"><div class="on">Spending</div><div>In vs out</div><div>Net worth</div></div>
+    <div class="card" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px">
+      <span style="color:var(--accent);font-size:20px">‹</span>
+      <div style="text-align:center"><div style="font-size:15px;font-weight:600">Last pay period</div><div class="cap muted">28 Sept – 27 Oct</div></div>
+      <span style="color:#C3CAD4;font-size:20px">›</span>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:center"><svg id="donut" width="230" height="230"></svg></div>
+      <div data-cats style="margin-top:6px"></div>
+    </div>
+  </div>
+  <div class="tabbar" data-tabs="4"></div><div class="home-ind"></div>
+</div>
+
+<!-- ============ 6. ACCOUNTS ============ -->
+<div class="phone" id="accounts">
+  <div class="status"><span>9:41</span><div class="island"></div><span class="icons" data-status></span></div>
+  <div class="content">
+    <div class="navbar"><span></span><span data-icon="plus"></span></div>
+    <h1>Accounts</h1>
+    <div class="group">
+      <div class="row" style="color:var(--accent)">✓&nbsp; Update all balances</div>
+      <div class="row"><span style="color:var(--accent)">⚑&nbsp; Debt payoff planner</span><span style="margin-left:auto" class="chev">›</span></div>
+    </div>
+    <div class="ghead"><span>Spending money</span><span>£1,960</span></div>
+    <div class="group" data-acc="spend"></div>
+    <div class="ghead"><span>Savings</span><span>£2,500</span></div>
+    <div class="group" data-acc="save"></div>
+    <div class="ghead"><span>What you owe</span><span>£9,890</span></div>
+    <div class="group" data-acc="owe"></div>
+  </div>
+  <div class="tabbar" data-tabs="3"></div><div class="home-ind"></div>
+</div>
+
+<script>
+const C = {accent:'#1F8A84', gold:'#B8872E', gold2:'#D9AE5B', muted:'#5B6B82', hair:'#E3E8EF', ink:'#0F1C33', neg:'#B54A3C', caution:'#C07A1C'};
+const ns = 'http://www.w3.org/2000/svg';
+
+// --- simple line icons (stand-ins for SF Symbols)
+const I = {
+  gear:'<circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M2.5 12h2.6M18.9 12h2.6M4.6 19.4l1.9-1.9M17.5 6.5l1.9-1.9"/>',
+  plus:'<circle cx="12" cy="12" r="10" fill="currentColor" stroke="none"/><path d="M12 7v10M7 12h10" stroke="#fff"/>',
+  cal:'<rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/>',
+  trend:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+  clock:'<rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 9.5h17"/><circle cx="16.5" cy="16" r="3"/>',
+  scale:'<path d="M12 4v16M5 20h14M4 8h16M6.5 8l-3 6h6zM17.5 8l-3 6h6z"/>',
+  flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+  down:'<path d="M3 7l6 6 4-4 8 8"/><path d="M15 17h6v-6"/>',
+  list:'<path d="M9 6h11M9 12h11M9 18h11M4 6h1M4 12h1M4 18h1"/>',
+  house:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  activity:'<rect x="4" y="3.5" width="16" height="17" rx="2.5"/><path d="M8 8.5h8M8 12h8M8 15.5h5"/>',
+  bills:'<rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/><path d="M12 13v3l2 1"/>',
+  bank:'<path d="M3 9l9-5 9 5M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/>',
+  pie:'<path d="M12 3v9h9a9 9 0 1 1-9-9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/>',
+  cart:'<path d="M3 4h2.5l2.2 10.5h10.6L20.5 7H7"/><circle cx="9" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/>',
+  bolt:'<path d="M13 2L5 14h6l-1 8 8-12h-6z"/>',
+  car:'<path d="M4 16v-4l2-5h12l2 5v4M3 16h18v2H3zM7 18v2M17 18v2"/><circle cx="7.5" cy="13.5" r="1"/><circle cx="16.5" cy="13.5" r="1"/>',
+  fork:'<path d="M7 3v8a2 2 0 0 0 2 2v8M7 3v5M11 3v5M17 3c-2 2-2 6 0 8v10"/>',
+  bag:'<path d="M5 8h14l-1 13H6zM9 8V6a3 3 0 0 1 6 0v2"/>',
+  building:'<path d="M5 21V4h9v17M14 9h5v12M8 8h3M8 12h3M8 16h3M3 21h18"/>',
+  play:'<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M10 9l5 3-5 3z"/>',
+  shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>',
+  heart:'<path d="M12 20s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 9c0 6-8 11-8 11z"/>',
+  brief:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5h6v2M3 12h18"/>',
+  ticket:'<path d="M3 8a2 2 0 0 0 0 4v4h18v-4a2 2 0 0 1 0-4V5H3z"/>',
+  comb:'<path d="M4 9h16v4H4zM6 13v6M9 13v6M12 13v6M15 13v6M18 13v6"/>',
+  card:'<rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/>',
+  doc:'<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>',
+  lock:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><rect x="9" y="10.5" width="6" height="5" rx="1"/>',
+};
+function icon(name, size=20, color='currentColor', sw=1.8){
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${I[name]}</svg>`;
+}
+document.querySelectorAll('[data-icon]').forEach(el => {
+  const n = el.dataset.icon; el.innerHTML = icon(n, n==='plus'?26:n==='gear'?24:18, n==='plus'||n==='gear' ? C.accent : 'currentColor');
+});
+document.querySelectorAll('[data-status]').forEach(el => el.innerHTML =
+  `<svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+   <svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="#0F1C33" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2"/><rect x="23.5" y="4" width="1.5" height="4" rx=".7" opacity=".4"/></svg>`);
+
+// --- vault mark
+document.querySelectorAll('[data-vault]').forEach(el => {
+  const s = +el.dataset.vault;
+  el.innerHTML = `<svg width="${s}" height="${s}" viewBox="0 0 44 44"><rect width="44" height="44" rx="11" fill="#1C2E4F"/>
+    <circle cx="22" cy="22" r="11.5" fill="none" stroke="${C.gold2}" stroke-width="2.6"/><circle cx="22" cy="22" r="3" fill="${C.gold2}"/>
+    ${[45,135,225,315].map(a=>`<rect x="20.9" y="10" width="2.2" height="7" rx="1.1" fill="${C.gold2}" transform="rotate(${a} 22 22)"/>`).join('')}</svg>`;
+});
+
+// --- tab bar
+const tabs = [['house','Home'],['activity','Activity'],['bills','Bills'],['bank','Accounts'],['pie','Insights']];
+document.querySelectorAll('[data-tabs]').forEach(el => {
+  el.innerHTML = tabs.map(([i,l],k)=>`<div class="tab ${k==+el.dataset.tabs?'on':''}">${icon(i,25)}<span>${l}</span></div>`).join('');
+});
+
+// --- category styling (same palette order as the app)
+const pal = ['#1F8A84','#D9AE5B','#4C6FBF','#C2637A','#6AA84F','#8E6CC4','#E08A3C','#3E9CC9','#9C8A6E','#5B6B82'];
+const cats = {salary:['#2E7D4F','brief'],housing:['#8E6CC4','house'],councilTax:['#E08A3C','building'],utilities:['#3E9CC9','bolt'],
+  groceries:['#6AA84F','cart'],transport:['#5B6B82','car'],eatingOut:['#1F8A84','fork'],shopping:['#D9AE5B','bag'],subscriptions:['#4C6FBF','play'],
+  insurance:['#C2637A','shield'],health:['#D16BA5','heart'],personalCare:['#B39DDB','comb'],entertainment:['#9C8A6E','ticket']};
+function ci(cat, size=36){ const [c,i]=cats[cat];
+  return `<div class="ci" style="width:${size}px;height:${size}px;background:${c}24">${icon(i,size*.5,c,2)}</div>`; }
+
+// --- budgets on home
+const budgets = [['eatingOut','Eating out',100,72],['shopping','Shopping',120,58],['groceries','Groceries',320,134],['transport','Transport',150,61]];
+document.querySelector('[data-budgets]').innerHTML = budgets.map(([k,l,lim,sp])=>
+  `<div class="brow"><div class="top"><span>${l}</span><span class="cap muted">£${lim-sp} left</span></div>
+   <div class="bar"><div style="width:${sp/lim*100}%;background:${cats[k][0]}"></div></div></div>`).join('');
+
+// --- bills
+const B = {
+  gym:['health','Gym','Fri 6 Nov · yesterday','£30.00',false,false,true],
+  energy:['utilities','Energy','Mon 9 Nov · in 2 days','£120.00',true],
+  rent:['housing','Rent','Thu 12 Nov · in 5 days','£850.00'],
+  ctax:['councilTax','Council tax','Mon 16 Nov · in 9 days','£165.00',true],
+  stream:['subscriptions','Streaming','Wed 18 Nov · in 11 days','£10.99'],
+  mobile:['utilities','Mobile','Sat 21 Nov · in 14 days','£22.00',true],
+  car:['insurance','Car insurance','Wed 25 Nov · in 18 days','£48.00',true],
+  salary:['salary','Salary','Fri 27 Nov · in 20 days','+£2,350.00',false,true],
+  tv:['subscriptions','TV licence','Wed 16 Dec · in 40 days','£174.50'],
+};
+function billRow([cat,n,d,a,dd,inc,over]){
+  return `<div class="row">${ci(cat)}<div class="t"><div class="n">${n}${dd?'<span class="tag">DD</span>':''}${inc?'<span class="tag inc">Income</span>':''}</div>
+    <div class="s" style="${over?'color:'+C.neg:''}">${d}</div></div><div class="amt" style="${inc?'color:#2E7D4F':''}">${a}</div></div>`;
+}
+const lists = {home:['gym','energy','rent','ctax','stream','mobile'], overdue:['gym'], before:['energy','rent','ctax','stream','mobile','car'], later:['salary','tv']};
+document.querySelectorAll('[data-bills]').forEach(el => el.innerHTML = lists[el.dataset.bills].map(k=>billRow(B[k])).join(''));
+
+// --- step-line forecast chart
+const fc = [1930,1930,1810,1810,1810,960,960,960,960,795,795,795,795,795,773,773,773,773,725,725,3075,3075,3075,3075,3075,3075,3075,3075,3075,3045,3045,3045,2925,2925,2925,2925];
+function forecast(id, w, h){
+  const svg = document.getElementById(id), L=40, T=16, B=20, W=w-L-4, H=h-T-B, max=3500;
+  const x = i => L + i/(fc.length-1)*W, y = v => T + H - v/max*H;
+  let d = `M${x(0)},${y(fc[0])}`; fc.forEach((v,i)=>{ if(i){ d+=`H${x(i)}V${y(v)}`; } });
+  const area = d + `H${x(fc.length-1)}V${y(0)}H${x(0)}Z`;
+  let s = `<defs><linearGradient id="g${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${C.accent}" stop-opacity=".28"/><stop offset="1" stop-color="${C.accent}" stop-opacity=".02"/></linearGradient></defs>`;
+  [0,1000,2000,3000].forEach(v=> s+=`<line x1="${L}" x2="${w-4}" y1="${y(v)}" y2="${y(v)}" stroke="${C.hair}"/><text x="${L-6}" y="${y(v)+4}" font-size="10" fill="${C.muted}" text-anchor="end">£${v?v/1000+'k':0}</text>`);
+  s += `<path d="${area}" fill="url(#g${id})"/><path d="${d}" fill="none" stroke="${C.accent}" stroke-width="2"/>`;
+  const px = x(20); s += `<line x1="${px}" x2="${px}" y1="${T}" y2="${T+H}" stroke="${C.gold}" stroke-dasharray="4 3"/><text x="${px+3}" y="${T-4}" font-size="10" fill="${C.gold}">Payday</text>`;
+  [['7 Nov',0],['17 Nov',10],['27 Nov',20],['7 Dec',30]].forEach(([l,i])=> s+=`<text x="${x(i)}" y="${h-4}" font-size="10" fill="${C.muted}" text-anchor="middle">${l}</text>`);
+  svg.innerHTML = s;
+}
+forecast('forecast',356,150); forecast('forecast2',356,130);
+
+// --- stacked area payoff chart
+const series = [[640,2850,6400],[580,2824,6252],[520,2797,6103],[458,2770,5953],[394,2743,5802],[329,2715,5650],[262,2686,5498],[194,2657,5344],[124,2627,5189],[52,2596,5033],[0,2544,4876],[0,2437,4718],[0,2327,4559],[0,2216,4399],[0,2102,4238],[0,1985,4076],[0,1866,3913],[0,1745,3749],[0,1621,3584],[0,1495,3417],[0,1366,3250],[0,1234,3081],[0,1100,2911],[0,963,2741],[0,823,2569],[0,680,2396],[0,534,2221],[0,385,2046],[0,233,1869],[0,78,1692],[0,0,1433],[0,0,1093],[0,0,750],[0,0,405],[0,0,57],[0,0,0]];
+(function(){
+  const svg=document.getElementById('payoffChart'), w=356,h=170,L=40,T=8,B=20,W=w-L-4,H=h-T-B,max=10000;
+  const x=i=>L+i/(series.length-1)*W, y=v=>T+H-v/max*H, colours=['#1F8A84','#D9AE5B','#4C6FBF'];
+  let s=''; [0,2500,5000,7500,10000].forEach(v=> s+=`<line x1="${L}" x2="${w-4}" y1="${y(v)}" y2="${y(v)}" stroke="${C.hair}"/><text x="${L-6}" y="${y(v)+4}" font-size="10" fill="${C.muted}" text-anchor="end">£${v?(v/1000)+'k':0}</text>`);
+  // stack order: store at bottom
+  for(let k=2;k>=0;k--){
+    const top=series.map(r=>r.slice(0,k+1).reduce((a,b)=>a+b,0)), bot=series.map(r=>r.slice(0,k).reduce((a,b)=>a+b,0));
+    let d=`M${x(0)},${y(top[0])}`; top.forEach((v,i)=>{ if(i) d+=`L${x(i)},${y(v)}`; });
+    for(let i=series.length-1;i>=0;i--) d+=`L${x(i)},${y(bot[i])}`;
+    s+=`<path d="${d}Z" fill="${colours[k]}" opacity=".9"/>`;
+  }
+  [['Nov 2026',0],['2027',12],['2028',24],['Oct 2029',35]].forEach(([l,i])=> s+=`<text x="${x(i)}" y="${h-4}" font-size="10" fill="${C.muted}" text-anchor="${i===35?'end':i?'middle':'start'}">${l}</text>`);
+  svg.innerHTML=s;
+})();
+
+// --- payoff order
+document.querySelector('[data-order]').innerHTML = [
+  ['Store card','£640 · 29.9% APR','September 2027','#1F8A84'],
+  ['Visa credit card','£2,850 · 24.9% APR','May 2029','#D9AE5B'],
+  ['Car loan','£6,400 · 7.9% APR','October 2029','#4C6FBF']].map(([n,s,d,c],i)=>
+  `<div class="row"><div class="num" style="background:${c}">${i+1}</div><div class="t"><div style="font-size:16px">${n}</div><div class="s">${s}</div></div>
+   <div style="text-align:right"><div class="s" style="font-size:10px">Cleared</div><div style="font-size:12px;font-weight:600;color:#2E7D4F">${d}</div></div></div>`).join('');
+
+// --- donut
+const spend = [['housing','Rent / mortgage',850],['groceries','Groceries',298],['councilTax','Council tax',165],['utilities','Energy & water',142],
+  ['transport','Transport',131],['eatingOut','Eating out',96],['shopping','Shopping',84],['insurance','Insurance',48],['entertainment','Entertainment',41],['health','Health',30]];
+(function(){
+  const svg=document.getElementById('donut'), total=spend.reduce((a,b)=>a+b[2],0), cx=115,cy=115,r1=110,r0=68;
+  let a0=-Math.PI/2, s='';
+  spend.forEach(([k,,v])=>{
+    const a1=a0+v/total*2*Math.PI-0.025, large=(a1-a0)>Math.PI?1:0, p=(r,a)=>`${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`;
+    s+=`<path d="M${p(r1,a0)}A${r1},${r1} 0 ${large} 1 ${p(r1,a1)}L${p(r0,a1)}A${r0},${r0} 0 ${large} 0 ${p(r0,a0)}Z" fill="${cats[k][0]}"/>`;
+    a0=a1+0.025;
+  });
+  s+=`<text x="${cx}" y="${cy-6}" text-anchor="middle" font-size="12" fill="${C.muted}">Total spent</text><text x="${cx}" y="${cy+16}" text-anchor="middle" font-size="20" font-weight="600" fill="${C.ink}">£${total.toLocaleString('en-GB')}</text>`;
+  svg.innerHTML=s;
+  document.querySelector('[data-cats]').innerHTML = spend.slice(0,6).map(([k,l,v])=>
+    `<div class="row" style="padding:5px 0">${ci(k,30)}<div class="t" style="font-size:15px">${l}</div><span class="cap muted">${Math.round(v/total*100)}%</span><span class="amt" style="width:64px;text-align:right">£${v.toLocaleString('en-GB')}</span></div>`).join('');
+})();
+
+// --- accounts
+function accRow(i,n,d,a,extra,debt){ const c = debt ? '#B8872E':'#1F8A84';
+  return `<div class="row"><div class="ai" style="background:${c}24">${icon(i,18,c,2)}</div><div class="t"><div style="font-size:16px">${n}</div><div class="s">${d}</div></div>
+   <div style="text-align:right"><div class="amt">${a}</div>${extra?`<div style="font-size:10px;color:#B8872E">${extra}</div>`:''}</div><span class="chev">›</span></div>`; }
+document.querySelector('[data-acc="spend"]').innerHTML = accRow('bank','Everyday current','Current account · updated today','£1,960.00');
+document.querySelector('[data-acc="save"]').innerHTML = accRow('lock','Rainy day savings','Savings · updated today','£2,500.00');
+document.querySelector('[data-acc="owe"]').innerHTML =
+  accRow('card','Visa credit card','Credit card · 24.9% APR · 71% of limit','£2,850.00','16% repaid',true) +
+  accRow('card','Store card','Credit card · 29.9% APR · 53% of limit','£640.00','30% repaid',true) +
+  accRow('doc','Car loan','Loan · 7.9% APR · updated today','£6,400.00','10% repaid',true);
+</script>
+</body>
+</html>

@@ -81,7 +81,7 @@ enum DemoData {
         // Accounts with ~16 weeks of history, ending at today's balance.
         let specs: [(String, AccountKind, Double, Double, Double, Double, Double)] = [
             // name, kind, balance now, apr, minimum, limit, balance 16 weeks ago
-            ("Everyday current", .current, 1_240, 0, 0, 0, 860),
+            ("Everyday current", .current, 1_960, 0, 0, 0, 1_520),
             ("Rainy day savings", .savings, 2_500, 0, 0, 0, 1_900),
             ("Visa credit card", .creditCard, 2_850, 24.9, 85, 4_000, 3_400),
             ("Store card", .creditCard, 640, 29.9, 25, 1_200, 910),
