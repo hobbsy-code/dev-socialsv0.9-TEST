@@ -33,7 +33,11 @@ struct DashboardView: View {
                                        actionTitle: "Go to Accounts") { selectedTab = .accounts }
                     } else {
                         safeToSpendCard
-                        if settings.checkInDue { checkInCard }
+                        if settings.checkInDue {
+                            checkInCard
+                        } else if settings.backupDue && accounts.contains(where: { $0.createdAt < Date.now.addingTimeInterval(-7 * 86_400) }) {
+                            backupCard
+                        }
                         periodCard
                         forecastCard
                         upcomingCard
@@ -118,6 +122,25 @@ struct DashboardView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Weekly check-in").font(.headline).foregroundStyle(Theme.ink)
                     Text("Update your balances from your banking apps. About 30 seconds.")
+                        .font(.caption).foregroundStyle(Theme.muted).multilineTextAlignment(.leading)
+                }
+                Spacer()
+                Image(systemName: "chevron.right").foregroundStyle(Theme.muted)
+            }
+            .card()
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var backupCard: some View {
+        NavigationLink { SettingsView() } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "icloud.and.arrow.up").font(.title2).foregroundStyle(Theme.accent)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Time for a backup").font(.headline).foregroundStyle(Theme.ink)
+                    Text(settings.lastBackupAt == nil
+                         ? "Save a copy to your iCloud Drive so nothing is lost if you change phones."
+                         : "It's been over a month. Save a fresh copy to your iCloud Drive.")
                         .font(.caption).foregroundStyle(Theme.muted).multilineTextAlignment(.leading)
                 }
                 Spacer()

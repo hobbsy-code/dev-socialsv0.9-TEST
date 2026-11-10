@@ -46,8 +46,10 @@ struct SettingsView: View {
             } header: {
                 Text("Privacy")
             } footer: {
-                Text("All your data is stored only on this iPhone. Clarity Vaults has no account, no bank login and no tracking.")
+                Text("Your data is stored on this iPhone and in any backups you choose to save. Clarity Vaults has no account, no bank login and no tracking.")
             }
+
+            BackupSection()
 
             Section("Your data") {
                 Button("Export activity as CSV") {
@@ -75,7 +77,7 @@ struct SettingsView: View {
                 exportURL = nil
             }
         } message: {
-            Text("This deletes all accounts, bills and activity from this iPhone. It can't be undone. Export a CSV first if you want a copy.")
+            Text("This deletes all accounts, bills and activity from this iPhone. It can't be undone. Back up first if you might want them again.")
         }
         .confirmationDialog("Load example data?", isPresented: $confirmDemo, titleVisibility: .visible) {
             Button("Replace my data with examples", role: .destructive) {
@@ -127,7 +129,7 @@ struct AboutView: View {
                 group("Pay periods", "Clarity Vaults budgets from payday to payday instead of by calendar month, so totals line up with how your money actually arrives.")
                 group("Cash forecast", "Projects your spending money forward using only scheduled bills and income. Day-to-day spending isn't predicted. The chart shows what's already committed.")
                 group("Debt payoff", "Each month interest is added (APR ÷ 12), every debt gets its minimum, and anything extra goes to one target debt: highest rate first (avalanche) or smallest balance first (snowball). When a debt is cleared its payment rolls on to the next. Real card minimums fall as balances fall, and promotional rates end, so treat dates as a guide and update balances regularly.")
-                group("Your data", "Everything is stored on this device using Apple's on-device database. Nothing is sent to us or anyone else. Deleting the app deletes your data, so export a CSV now and then if you want a backup.")
+                group("Your data", "Everything is stored on this device using Apple's on-device database. Nothing is sent to us or anyone else. Deleting the app deletes your data, so use Back up now in Settings (monthly, and before changing phones) to save a copy to your own iCloud Drive. Your iPhone's own iCloud Backup, if it's switched on, also includes the app's data.")
                 group("Need help with debt?", "Free, impartial, confidential help is available from MoneyHelper (moneyhelper.org.uk), StepChange (stepchange.org) and National Debtline (nationaldebtline.org). If you're struggling, contact your lender early: they must treat you fairly.")
                 DisclaimerText()
             }

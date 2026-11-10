@@ -208,3 +208,48 @@ final class CategoryColourTests: XCTestCase {
         XCTAssertEqual(Set(hexes).count, hexes.count, "each outgoing category needs its own chart colour")
     }
 }
+
+final class BackupFormatTests: XCTestCase {
+    func sample() -> BackupFile {
+        let acc = UUID(), bill = UUID()
+        let created = Date(timeIntervalSince1970: 1_790_000_000) // whole seconds survive ISO 8601
+        return BackupFile(
+            createdAt: created, appVersion: "1.0",
+            settings: .init(paySchedule: PaySchedule(frequency: .fourWeekly, dayOfMonth: 28, anchorDate: created, moveWeekendToFriday: true),
+                            safeToSpendBuffer: 50, reminderHour: 9, payoffStrategy: "snowball", payoffExtra: 75),
+            accounts: [.init(id: acc, name: "Visa", kind: "creditCard", balance: 2_850, apr: 24.9, minimumPayment: 85,
+                             creditLimit: 4_000, overdraftLimit: 0, includeInPayoff: true, startingBalance: 3_400, sortOrder: 0,
+                             createdAt: created, balanceUpdatedAt: created,
+                             snapshots: [.init(date: created, balance: 3_400), .init(date: created.addingTimeInterval(86_400), balance: 2_850)])],
+            entries: [.init(id: UUID(), amount: 12.5, kind: "expense", category: "groceries", note: "Milk, \"bread\" & eggs",
+                            date: created, accountID: acc, transferAccountID: nil, billID: bill)],
+            bills: [.init(id: bill, name: "Council tax", amount: 165, category: "councilTax", frequency: "councilTax10",
+                          nextDueDate: created, anchorDay: 1, reminderDaysBefore: 2, remindOnDueDay: true, isDirectDebit: true,
+                          isIncome: false, accountID: acc, isActive: true, lastPaidDate: nil, notes: "", createdAt: created)],
+            budgets: [.init(category: "groceries", limit: 320)])
+    }
+
+    func testRoundTripIsLossless() throws {
+        let original = sample()
+        let restored = try BackupFile.read(original.encoded())
+        XCTAssertEqual(restored, original)
+        XCTAssertEqual(restored.summary, "1 account, 1 bill, 1 entry")
+    }
+
+    func testRejectsFilesThatAreNotBackups() {
+        XCTAssertThrowsError(try BackupFile.read(Data("{\"hello\": 1}".utf8))) { XCTAssertEqual($0 as? BackupFile.ReadError, .notABackup) }
+        XCTAssertThrowsError(try BackupFile.read(Data("not json".utf8))) { XCTAssertEqual($0 as? BackupFile.ReadError, .notABackup) }
+    }
+
+    func testRejectsNewerFormatWithClearMessage() throws {
+        var newer = sample()
+        newer.formatVersion = BackupFile.currentVersion + 1
+        XCTAssertThrowsError(try BackupFile.read(newer.encoded())) {
+            XCTAssertEqual($0 as? BackupFile.ReadError, .newerVersion(BackupFile.currentVersion + 1))
+        }
+    }
+
+    func testFilenameUsesDate() {
+        XCTAssertTrue(sample().suggestedFilename.hasPrefix("Clarity Vaults backup 2026-"))
+    }
+}

@@ -6,13 +6,14 @@ Everything in the **Must** and **Should** rows of `market-research.md`:
 manual-first accounts (including mortgage), fast entry, weekly balance check-in, bills and recurring income
 with reminders (including 10-month council tax), payday-to-payday periods, safe to spend, 5-week cash forecast,
 category spending limits, insights charts, debt payoff planner (avalanche/snowball, extra and one-off payments,
-income-based suggestion), home-screen widget, Face ID lock, CSV export, example data.
+income-based suggestion), home-screen widget, Face ID lock, CSV export, example data,
+**backup to iCloud Drive / Files with restore and undo**.
 
 ## v1.1: retention and sharing (≈ 1–3 months after launch)
 
 | Feature | Why | Notes |
 |---|---|---|
-| iCloud sync between devices | Backup worries; iPad requests | Models already have defaults on every property, so SwiftData + CloudKit can be switched on (`cloudKitDatabase: .automatic`) without migration. Needs an iCloud container in the Apple Developer account. |
+| iCloud sync between devices | iPad requests; v1.0 already has manual backup/restore | Models already have defaults on every property, so SwiftData + CloudKit can be switched on (`cloudKitDatabase: .automatic`) without migration. Needs an iCloud container in the Apple Developer account. |
 | Partner / household sharing | 7.7% of positive reviews mention partners | CloudKit sharing (`CKShare`). Good candidate for the paid "Plus" unlock. |
 | Custom categories and split transactions | Top-2 request theme | Move categories from an enum to a model. |
 | Savings goals / sinking funds | 22 requests; annual bills | E.g. "car service £400 by March": monthly amount needed. |

@@ -7,6 +7,7 @@ struct OnboardingView: View {
     @State private var page = 0
     @State private var schedule = PaySchedule()
     @State private var acceptedDisclaimer = false
+    @State private var showingRestore = false
 
     var body: some View {
         ZStack {
@@ -74,8 +75,11 @@ struct OnboardingView: View {
                     .buttonStyle(.borderedProminent).controlSize(.large)
                 Button("Explore with example data") { complete(demo: true) }
                     .controlSize(.large)
+                Button("Restore from a backup") { showingRestore = true }
+                    .font(.subheadline)
             }
             .disabled(!acceptedDisclaimer)
+            .restoreFlow(isPresented: $showingRestore) { settings.hasOnboarded = true }
         }
         .padding(24)
     }

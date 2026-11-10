@@ -17,9 +17,11 @@ The feature set comes from the research in [`../docs/market-research.md`](../doc
 | **Insights** | Spending by category (donut, any pay period); money in vs out (last 6 pay periods, with average surplus); net worth over time; category spending limits |
 | **Payoff planner** | Avalanche or snowball; extra monthly payment; one-off lump sum; suggestion based on your surplus; debt-free date; interest saved vs minimums only; balance chart by debt; payoff order; warnings for minimums below interest and 0% promotional rates |
 | **Settings** | Payday (monthly on a date with weekend → Friday, last working day, weekly, fortnightly, 4-weekly); safety buffer; reminder time; Face ID lock; CSV export; example data; erase all |
+| **Backup** | **Back up now** saves one file to iCloud Drive (or anywhere in Files). **Restore from backup** shows what's in the file and asks before replacing anything. It keeps a safety copy so the restore can be **undone**. Monthly reminder on Home; restore is also offered during first-time setup for new phones. |
 | **Widget** | Small/medium home-screen widget: safe to spend, days to payday, next bill |
 
-**Privacy:** all data is stored on the device with SwiftData. No account, no network calls, no analytics.
+**Privacy:** all data is stored on the device with SwiftData. No account, no network calls, no analytics. Backups go
+wherever the user saves them (normally their own iCloud Drive), never to us.
 
 ## Requirements
 
@@ -61,6 +63,7 @@ ClarityVaults/
 │   │   ├── DebtForecaster.swift   avalanche / snowball simulation
 │   │   ├── BalanceEngine.swift    how entries change balances (cards/loans vs assets)
 │   │   ├── Analytics.swift        category totals, in vs out, net worth history
+│   │   ├── BackupFormat.swift     versioned JSON backup file format
 │   │   └── Formatting.swift       £ and en-GB date formatting
 │   ├── Services/               Settings, notifications, Face ID, widget bridge, CSV, example data
 │   └── Views/                  SwiftUI screens by tab
@@ -83,7 +86,7 @@ ClarityVaults/
 
 ## Testing status
 
-- The 22 logic unit tests pass. They were compiled and run with Swift 6.0.3 (Swift 5 language mode) on Linux against
+- The 27 logic unit tests pass (including backup save/read round-trip and version checks). They were compiled and run with Swift 6.0.3 (Swift 5 language mode) on Linux against
   the same source files, with the UI-only types stubbed out.
 - The SwiftUI screens, widget, notifications and Face ID can only be built on macOS. **Do a first build in Xcode and
   test on a device** before release.
@@ -91,3 +94,10 @@ ClarityVaults/
 ## Disclaimer
 
 Clarity Vaults is a budgeting tool, not financial advice. Forecasts are estimates based on user-entered figures.
+
+## Backup file format
+
+A backup is one pretty-printed JSON file (`Clarity Vaults backup YYYY-MM-DD.json`) containing a `formatVersion`,
+settings, accounts with balance history, activity, bills and spending limits. It's defined in
+`Logic/BackupFormat.swift`. If you ever change the data model, add the new fields as optional, bump
+`BackupFile.currentVersion`, and keep reading older versions so customers' old backups still restore.

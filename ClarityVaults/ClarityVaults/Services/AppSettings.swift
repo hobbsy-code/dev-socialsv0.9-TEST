@@ -13,6 +13,7 @@ final class AppSettings: ObservableObject {
     @Published var payoffStrategy: PayoffStrategy { didSet { defaults.set(payoffStrategy.rawValue, forKey: Keys.strategy) } }
     @Published var payoffExtra: Double { didSet { defaults.set(payoffExtra, forKey: Keys.extra) } }
     @Published var lastCheckIn: Date? { didSet { defaults.set(lastCheckIn, forKey: Keys.checkIn) } }
+    @Published var lastBackupAt: Date? { didSet { defaults.set(lastBackupAt, forKey: Keys.backup) } }
     @Published var paySchedule: PaySchedule {
         didSet { if let data = try? JSONEncoder().encode(paySchedule) { defaults.set(data, forKey: Keys.pay) } }
     }
@@ -26,6 +27,7 @@ final class AppSettings: ObservableObject {
         payoffStrategy = PayoffStrategy(rawValue: defaults.string(forKey: Keys.strategy) ?? "") ?? .avalanche
         payoffExtra = defaults.object(forKey: Keys.extra) as? Double ?? 50
         lastCheckIn = defaults.object(forKey: Keys.checkIn) as? Date
+        lastBackupAt = defaults.object(forKey: Keys.backup) as? Date
         if let data = defaults.data(forKey: Keys.pay), let schedule = try? JSONDecoder().decode(PaySchedule.self, from: data) {
             paySchedule = schedule
         } else {
@@ -41,6 +43,12 @@ final class AppSettings: ObservableObject {
         return Date.now.timeIntervalSince(lastCheckIn) > 6 * 24 * 3600
     }
 
+    /// Gentle nudge once a month (only once there's something worth backing up).
+    var backupDue: Bool {
+        guard let lastBackupAt else { return true }
+        return Date.now.timeIntervalSince(lastBackupAt) > 30 * 24 * 3600
+    }
+
     enum Keys {
         static let onboarded = "hasOnboarded"
         static let appLock = "appLockEnabled"
@@ -49,6 +57,7 @@ final class AppSettings: ObservableObject {
         static let strategy = "payoffStrategy"
         static let extra = "payoffExtra"
         static let checkIn = "lastCheckIn"
+        static let backup = "lastBackupAt"
         static let pay = "paySchedule"
     }
 }
